@@ -1,0 +1,16 @@
+@import '../../../scss/common-style';
+
+$grey: #ccc;
+
+.brand {
+    &_header {
+        @extend .padding;
+        display: flex;
+        border-bottom: 1px solid grey;
+
+        span {
+            font-size: 25px;
+            font-weight: 500;
+        }
+    }
+}

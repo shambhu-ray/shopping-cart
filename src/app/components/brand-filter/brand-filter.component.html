@@ -1,0 +1,14 @@
+<mat-card class="brand">
+    <div class="brand_header">
+        <span>Brands</span>
+    </div>
+
+    <div class="brand_body">
+        <mat-selection-list (selectionChange)="onChangeSelectBox($event)">
+            <mat-list-option togglePosition="before" *ngFor="let brand of brands" [value]="brand">
+                <!-- Brand name and it's count -->
+                {{brand | titlecase}} ({{brandItemsCount[brand]}})
+            </mat-list-option>
+        </mat-selection-list>
+    </div>
+</mat-card>

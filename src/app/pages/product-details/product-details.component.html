@@ -1,0 +1,83 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <ng-container [ngTemplateOutlet]="productImageTempRef"></ng-container>
+        </div>
+        <div class="col-sm-7">
+            <ng-container [ngTemplateOutlet]="productDetailsTempRef"></ng-container>
+        </div>
+    </div>
+</div>
+
+<!-- Product Image Template -->
+<ng-template #productImageTempRef>
+    <aside class="gallery">
+        <mat-card class="gallery_card">
+            <div class="gallery_wrap">
+                <div class="gallery_img_big">
+                    <img [src]="currentImage" width="100" height="100" />
+                </div>
+                <div class="gallery_img_small">
+                    <div *ngFor="let image of product?.images; let i = index" class="gallery_item"
+                        (click)="onChangeImage(i)">
+                        <img [src]="image" />
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+
+
+    </aside>
+</ng-template>
+
+<!-- Product Details Template -->
+<ng-template #productDetailsTempRef>
+    <aside class="product_details">
+        <article class="">
+            <mat-card class="product_details_card">
+                <h3 class="title h1">{{product.title}}</h3>
+                <p class="h2 text-warning">
+                    <span class="currency">&#8377;</span>{{product.price | priceFormatter}}
+                </p>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>
+                        <p>{{product.description}}</p>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>Brand</dt>
+                    <dd class="text-capitalize">{{product.brand}}</dd>
+                </dl>
+                <dl>
+                    <dt>Size</dt>
+                    <dd>{{product.size}}</dd>
+                </dl>
+                <dl>
+                    <dt>Camera</dt>
+                    <dd>{{product.camera}}</dd>
+                </dl>
+                <dl>
+                    <dt>CPU</dt>
+                    <dd>{{product.cpu}}</dd>
+                </dl>
+                <dl>
+                    <dt>Memory</dt>
+                    <dd>{{product.memory}}</dd>
+                </dl>
+                <dl>
+                    <dt>Display</dt>
+                    <dd>{{product.display}}</dd>
+                </dl>
+                <dl>
+                    <dt>Battery</dt>
+                    <dd>{{product.battery}}</dd>
+                </dl>
+                <hr />
+                <app-action-button (addProductToCart)="onAddProductToCart()"
+                    (buyNow)="onBuyNow(product.id)"></app-action-button>
+            </mat-card>
+        </article>
+    </aside>
+
+</ng-template>

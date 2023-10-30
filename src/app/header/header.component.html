@@ -1,0 +1,10 @@
+<header class="fixed-top">
+  <mat-toolbar class="px-5" color="primary" style="min-height:75px;">
+    <h2 class="title" routerLink="/products">{{title}}</h2>
+    <span class="_spacer"></span>
+    <button mat-icon-button routerLink="/cart" [matBadge]="(shop$ | async)?.cart.length"
+      [matBadgeHidden]="(shop$ | async)?.cart.length == 0" matBadgeColor="accent">
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+  </mat-toolbar>
+</header>

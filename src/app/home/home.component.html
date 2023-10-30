@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 my-3">
+            <ng-container [ngTemplateOutlet]="brandTempRef">
+            </ng-container>
+        </div>
+        <div class="col-lg-9 my-3">
+            <ng-container [ngTemplateOutlet]="productsTempRef" [ngTemplateOutletContext]="{products:products}">
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<!-- Product Template -->
+<ng-template #productsTempRef let-products='products'>
+    <div class="row">
+        <div class="col-md-6 col-lg-4 mb-4" *ngFor="let product of products; trackBy:trackById">
+            <app-product-card [product]="product"></app-product-card>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Brand list template -->
+<ng-template #brandTempRef>
+    <app-brand-filter></app-brand-filter>
+</ng-template>

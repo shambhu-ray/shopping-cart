@@ -1,0 +1,37 @@
+@import '../../../scss/common-style';
+
+.product {
+    height: 100%;
+
+    &_card {
+        @extend .padding;
+        cursor: pointer;
+
+        &:hover {
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, .2);
+        }
+    }
+
+    &_title {
+        @extend .margin-top-bottom;
+    }
+
+    &_price {
+        font-weight: 500;
+    }
+
+    &_actions {
+        display: flex;
+        visibility: hidden;
+        justify-content: space-between;
+
+        button {
+            width: 45%;
+        }
+    }
+
+    &:hover &_actions {
+        visibility: visible;
+        opacity: 1;
+    }
+}

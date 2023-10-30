@@ -1,0 +1,90 @@
+<div class="container" *ngIf="cartProducts">
+    <div class="card shopping-cart">
+        <div class="card-header bg-dark-grey text-dark d-flex align-items-center py-3">
+            <mat-icon>shopping_cart</mat-icon> <span class="mx-3">ShoppingCart</span>
+        </div>
+        <div class="card-body">
+            <!-- Cart items -->
+            <ng-container *ngFor="let cartItem of cartProducts; trackBy:trackById"
+                [ngTemplateOutlet]="shoppingCartItemTempRef"
+                [ngTemplateOutletContext]="{$implicit: cartItem}"></ng-container>
+
+            <!-- Cart is empty -->
+            <div *ngIf="cartProducts.length === 0" class="text-center">
+                <h2 class="display-4 text-center">
+                    There is no item in cart
+                </h2>
+
+                <button routerLink="/products" mat-stroked-button color="primary">Shop now</button>
+            </div>
+
+        </div>
+        <!-- Cart checkout -->
+        <div *ngIf="cartProducts.length !== 0" class="card-footer">
+            <div class="float-start py-3">
+                <button mat-flat-button color="accent" (click)="checkout()">Checkout</button>
+            </div>
+
+            <div class="float-end py-3">
+                Total price: <b><span>&#8377;</span>{{totalPrice | priceFormatter}}</b>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cart item template -->
+<ng-template #shoppingCartItemTempRef let-product>
+    <div class="row align-items-center mb-3">
+        <div class="col-12 col-sm-12 col-md-2 text-center">
+            <img class="img-responsive" alt="prewiew" style="height: 60%; width: 60%" [src]="product.images[0]" />
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 flex-column d-flex">
+            <h4><strong>{{product.title | shortenTitle}}</strong></h4>
+            <h4>
+                <small>{{product.description}}</small>
+            </h4>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center">
+            <div class="col-4 col-md-3 d-flex justify-content-centeralign-items-center">
+                <strong>
+                    <span>&#8377;</span>{{product.price | priceFormatter}} <span class="text-muted">x</span>
+                </strong>
+            </div>
+            <div class="col-6 col-md-7 my-3">
+                <div class="input-group">
+                    <span class="d-flex justify-content-center align-items-center">
+                        <button mat-icon-button color="primary" (click)="cartService.onDecrementCartItem(product.id)"
+                            type="button">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                    </span>
+                    <span class="qty">{{product.quantity}}</span>
+                    <span class="d-flex justify-content-center align-items-center">
+                        <button mat-icon-button color="primary" (click)="cartService.onIncrementCartItem(product.id)"
+                            type="button">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-2 col-md-2 text-right">
+                <button mat-icon-button color="warn" (click)="cartService.onRemoveCartItem(product.id)" type="button">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</ng-template>
+
+<!-- Checkout success dialog template -->
+<ng-template #checkoutSuccessDialogTempRef>
+    <div class="p-3">
+        <div mat-dialog-content>
+            <p>Your order has been placed successfully.</p>
+        </div>
+        <div mat-dialog-actions [align]="'center'">
+            <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+        </div>
+    </div>
+</ng-template>

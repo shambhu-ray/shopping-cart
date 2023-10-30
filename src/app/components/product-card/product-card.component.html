@@ -1,0 +1,15 @@
+<div class="product">
+    <mat-card class="product_card">
+        <img [routerLink]="['/products', product.id]" mat-card-image [src]="product.images[0]" [alt]="product.title">
+        <mat-card-content [routerLink]="['/products', product.id]" class="product_title">
+            <h4 class="text-truncate">{{product.title}}</h4>
+            <h3 class="product_price"><span>&#8377;</span>{{product.price | priceFormatter}}</h3>
+
+            <p>{{product.description}}</p>
+        </mat-card-content>
+        <mat-card-actions class="product_actions">
+            <app-action-button class="w-100" (addProductToCart)="onAddProductToCart()"
+                (buyNow)="onBuyNow(product.id)"></app-action-button>
+        </mat-card-actions>
+    </mat-card>
+</div>

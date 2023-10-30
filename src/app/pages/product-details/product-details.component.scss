@@ -1,0 +1,49 @@
+@import '../../../scss/common-style';
+
+// Style for gallery
+.gallery {
+    text-align: center;
+
+    &_card {
+        @extend .padding;
+    }
+
+    &_wrap img {
+        height: 450px;
+        width: auto;
+        display: inline-block;
+    }
+
+    &_img {
+
+        &_big,
+        &_small {
+            @extend .margin-top-bottom;
+        }
+
+        &_small img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    }
+
+    &_item {
+        width: 60px;
+        height: 60px;
+        border: 1px solid #ddd;
+        margin: 7px 2px;
+        display: inline-block;
+        overflow: hidden;
+    }
+}
+
+.product_details {
+
+    &_card {
+        @extend .padding;
+    }
+
+}
