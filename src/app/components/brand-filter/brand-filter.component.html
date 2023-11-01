@@ -4,7 +4,7 @@
     </div>
 
     <div class="brand_body">
-        <mat-selection-list (selectionChange)="onChangeSelectBox($event)">
+        <mat-selection-list (selectionChange)="brandSelectBoxChangeEvent($event)">
             <mat-list-option togglePosition="before" *ngFor="let brand of brands" [value]="brand">
                 <!-- Brand name and it's count -->
                 {{brand | titlecase}} ({{brandItemsCount[brand]}})

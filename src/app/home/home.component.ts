@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { combineLatest } from 'rxjs';
 import { Product } from '../shared/models/product.model';
 import { BrandPipe } from '../shared/pipes/brand.pipe';
-import { AppState } from '../store/app.state';
+import { StoreFacade } from '../store/store.facade';
 
 @Component({
   selector: 'app-home',
@@ -10,19 +11,16 @@ import { AppState } from '../store/app.state';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
 
   products: Product[] = [];
 
-  constructor(private _store: Store<AppState>, private _capitalize: BrandPipe) { }
+  constructor(private _storeService: StoreFacade, private _capitalize: BrandPipe) { }
 
   ngOnInit(): void {
-    this._store.select((state: AppState) => state).subscribe((state) => {
-      const brands = state.brandFilter;
-
-      const filterByBrandArr = this._capitalize.transform(state.shop.products, brands);
-
-      this.products = filterByBrandArr;
-    });
+    combineLatest([this._storeService.products$, this._storeService.brandFilter$])
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(([products, brands]) => this.products = this._capitalize.transform(products, brands));
   }
 
   /**

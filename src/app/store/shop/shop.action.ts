@@ -4,13 +4,28 @@ import { ShopActionTypes } from './shop.action.types';
 
 
 // cart actions
-export const removeProductFromCart = createAction(`[CartProduct] ${ShopActionTypes.REMOVE_PRODUCT_FROM_CART}`, props<{ payload: number }>());
-export const incrementCartQuantity = createAction(`[CartProduct] ${ShopActionTypes.INCREMENT_CART_ITEM_QUANTITY}`, props<{ payload: number }>());
-export const decrementCartQuantity = createAction(`[CartProduct] ${ShopActionTypes.DECREMENT_CART_ITEM_QUANTITY}`, props<{ payload: number }>());
-export const checkoutCartItem = createAction(`[CartProduct] ${ShopActionTypes.CHECKOUT_CART_ITEM}`, props<{ payload: Product[] }>());
-export const addProductToCart = createAction(`[CartProduct] ${ShopActionTypes.ADD_PRODUCT_TO_CART}`, props<{ payload: Product }>());
+const removeProductFromCart = createAction(`[CartProduct] ${ShopActionTypes.REMOVE_PRODUCT_FROM_CART}`, props<{ payload: number }>());
+const incrementCartQuantity = createAction(`[CartProduct] ${ShopActionTypes.INCREMENT_CART_ITEM_QUANTITY}`, props<{ payload: number }>());
+const decrementCartQuantity = createAction(`[CartProduct] ${ShopActionTypes.DECREMENT_CART_ITEM_QUANTITY}`, props<{ payload: number }>());
+const checkoutCartItem = createAction(`[CartProduct] ${ShopActionTypes.CHECKOUT_CART_ITEM}`, props<{ payload: Product[] }>());
+const addProductToCart = createAction(`[CartProduct] ${ShopActionTypes.ADD_PRODUCT_TO_CART}`, props<{ payload: Product }>());
 
 // Load products from api
-export const loadProducts = createAction(`[ProductAPI] ${ShopActionTypes.LOAD_PRODUCT}`);
-export const loadProductSuccess = createAction(`[ProductAPI] ${ShopActionTypes.LOAD_PRODUCT_SUCCESS}`, props<{ products: Product[] }>());
-export const loadProductFailure = createAction(`[ProductAPI] ${ShopActionTypes.LOAD_PRODUCT_FAILURE}`, props<{ error: string }>());
+const loadProducts = createAction(`[ProductAPI] ${ShopActionTypes.LOAD_PRODUCT}`);
+const loadProductSuccess = createAction(`[ProductAPI] ${ShopActionTypes.LOAD_PRODUCT_SUCCESS}`, props<{ products: Product[] }>());
+const loadProductFailure = createAction(`[ProductAPI] ${ShopActionTypes.LOAD_PRODUCT_FAILURE}`, props<{ error: string }>());
+
+
+export const ShopActions = {
+    removeProductFromCart,
+    incrementCartQuantity,
+    decrementCartQuantity,
+    checkoutCartItem,
+    addProductToCart
+}
+
+export const ProductLoadApiActions = {
+    loadProducts,
+    loadProductSuccess,
+    loadProductFailure
+}

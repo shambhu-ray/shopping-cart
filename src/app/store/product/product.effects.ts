@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Product } from "src/app/shared/models/product.model";
 import { DataService } from "../../services/data.service";
-import { loadProductFailure, loadProductSuccess, loadProducts } from "../shop/shop.action";
+import { ProductLoadApiActions } from "../shop/shop.action";
 
 @Injectable()
 export class ProductEffects {
@@ -13,11 +13,11 @@ export class ProductEffects {
 
   loadProducts$ = createEffect(() =>
     this._actions.pipe(
-      ofType(loadProducts),
+      ofType(ProductLoadApiActions.loadProducts),
       mergeMap(() =>
         this._dataService.getProducts().pipe(
-          map((products: Product[]) => loadProductSuccess({ products })),
-          catchError((error) => of(loadProductFailure({ error })))
+          map((products: Product[]) => ProductLoadApiActions.loadProductSuccess({ products: products })),
+          catchError((error) => of(ProductLoadApiActions.loadProductFailure({ error: error })))
         )
       )
     )

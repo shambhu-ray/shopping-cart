@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSelectionListChange } from '@angular/material/list';
-import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
+import { StoreFacade } from 'src/app/store/store.facade';
 import { brands } from '../../services/data/brands';
 import { Product } from '../../shared/models/product.model';
-import { AppState } from '../../store/app.state';
-import { addBrandToFilter, removeBrandFromFilter } from '../../store/brand-filter/brand-filter.action';
 
 @Component({
   selector: 'app-brand-filter',
@@ -12,28 +12,29 @@ import { addBrandToFilter, removeBrandFromFilter } from '../../store/brand-filte
   styleUrls: ['./brand-filter.component.scss']
 })
 export class BrandFilterComponent implements OnInit {
-
+  private _destroyRef = inject(DestroyRef);
   brands = brands;
   brandItemsCount: any = {};
 
-  constructor(private _store: Store<AppState>) {
+  constructor(private _storeService: StoreFacade) {
   }
   ngOnInit() {
     this.loadBrands();
   }
 
-  /**
-  * Loads the brands by subscribing to the 'shop' store and calculating the count of products for each brand.
-  * 
-  */
   loadBrands(): void {
-    this._store.select('shop').subscribe(shop => {
-      const counts: any = {};
-      shop.products.forEach((p: Product) => {
-        counts[p.brand] = counts[p.brand] + 1 || 1;
+    this._storeService.products$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+        map((products) => {
+          const counts: any = {};
+          products.forEach((p: Product) => counts[p.brand] = counts[p.brand] + 1 || 1);
+          return counts;
+        })
+      )
+      .subscribe((counts) => {
+        this.brandItemsCount = counts;
       });
-      this.brandItemsCount = counts;
-    });
   }
 
   /**
@@ -42,14 +43,14 @@ export class BrandFilterComponent implements OnInit {
  * @param {MatSelectionListChange} $event - The event object containing the selection change information.
  * @return {void} This function does not return anything.
  */
-  onChangeSelectBox($event: MatSelectionListChange): void {
+  brandSelectBoxChangeEvent($event: MatSelectionListChange): void {
     const name = $event.options[0].value;
     const selected = $event.options[0].selected;
 
     if (selected) {
-      this._store.dispatch(addBrandToFilter({ payload: name }));
+      this._storeService.addBrandToFilter(name);
     } else {
-      this._store.dispatch(removeBrandFromFilter({ payload: name }));
+      this._storeService.removeBrandFromFilter(name);
     }
   }
 }

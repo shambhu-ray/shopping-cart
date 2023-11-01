@@ -1,25 +1,17 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
+import { StoreFacade } from 'src/app/store/store.facade';
 import { Product } from '../../shared/models/product.model';
-import { AppState } from '../../store/app.state';
-import { checkoutCartItem, decrementCartQuantity, incrementCartQuantity, removeProductFromCart } from '../../store/shop/shop.action';
 
 @Injectable()
 export class CartService {
 
-  constructor(private _store: Store<AppState>, public _dialog: MatDialog) { }
+  constructor(private _storeService: StoreFacade, public _dialog: MatDialog) { }
 
 
-  /**
- * Retrieves the cart as an observable of Product array.
- *
- * @return {Observable<Product[]>} The observable representing the cart.
- */
-  getCart(): Observable<Product[]> {
-    return this._store.select('shop').pipe(map((state) => state.cart));
-  }
+  getCart = (): Observable<Product[]> => this._storeService.cart$;
+
 
   /**
  * Retrieves the buy cart for a specific product ID.
@@ -28,10 +20,8 @@ export class CartService {
  * @return {Observable<Product[]>} An Observable that emits an array of products that match the given product ID.
  */
   getBuyCart(productId: number): Observable<Product[]> {
-    return this._store.select('shop')
-      .pipe(
-        map((state) => state.cart.filter(product => product.id === productId))
-      );
+    return this._storeService.cart$
+      .pipe(map((cart) => cart.filter(product => product.id === productId)));
   }
 
   /**
@@ -41,7 +31,7 @@ export class CartService {
  * @return {void} This function does not return a value.
  */
   onIncrementCartItem(id: number): void {
-    this._store.dispatch(incrementCartQuantity({ payload: id }));
+    this._storeService.incrementCartQuantity(id);
   }
 
   /**
@@ -51,7 +41,7 @@ export class CartService {
  * @return {void} This function does not return anything.
  */
   onDecrementCartItem(id: number): void {
-    this._store.dispatch(decrementCartQuantity({ payload: id }));
+    this._storeService.decrementCartQuantity(id);
   }
 
   /**
@@ -61,11 +51,11 @@ export class CartService {
  * @return {void} This function does not return anything.
  */
   onRemoveCartItem(id: number): void {
-    this._store.dispatch(removeProductFromCart({ payload: id }));
+    this._storeService.removeProductFromCart(id);
   }
 
   onCheckout(products: Product[]): void {
-    this._store.dispatch(checkoutCartItem({ payload: products }));
+    this._storeService.checkoutCartProducts(products);
   }
 
   /**

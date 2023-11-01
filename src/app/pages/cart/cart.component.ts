@@ -1,4 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DestroyRef, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Product } from '../../shared/models/product.model';
@@ -11,7 +12,7 @@ import { CartService } from './cart.service';
 })
 export class CartComponent implements OnInit {
   @ViewChild('checkoutSuccessDialogTempRef', { static: true }) dialogTempRef: TemplateRef<any>;
-
+  private _destroyRef = inject(DestroyRef);
   totalPrice: number;
   cartProducts: Product[];
 
@@ -20,6 +21,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this._route.params.pipe(
+      takeUntilDestroyed(this._destroyRef),
       map(params => +params['id']),
       tap((productId) => {
         if (isNaN(productId)) { this.getCart() }

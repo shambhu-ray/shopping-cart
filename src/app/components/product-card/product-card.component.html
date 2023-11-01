@@ -8,8 +8,8 @@
             <p>{{product.description}}</p>
         </mat-card-content>
         <mat-card-actions class="product_actions">
-            <app-action-button class="w-100" (addProductToCart)="onAddProductToCart()"
-                (buyNow)="onBuyNow(product.id)"></app-action-button>
+            <app-action-button class="w-100" (addProductToCart)="storeService.addProductToCart(product)"
+                (buyNow)="onBuyNow(product)"></app-action-button>
         </mat-card-actions>
     </mat-card>
 </div>

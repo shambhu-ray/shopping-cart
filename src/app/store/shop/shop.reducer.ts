@@ -2,8 +2,8 @@ import { Product } from '../../shared/models/product.model';
 
 import { createReducer, on } from '@ngrx/store';
 
-import { State } from '../app.state';
-import * as ShopActions from './shop.action';
+import { State } from '../store.state';
+import { ProductLoadApiActions, ShopActions } from './shop.action';
 
 
 export const initialState: State = {
@@ -13,7 +13,7 @@ export const initialState: State = {
 
 export const shoppingListReducer = createReducer(
   initialState,
-  on(ShopActions.loadProductSuccess, (state: State, { products }) => {
+  on(ProductLoadApiActions.loadProductSuccess, (state: State, { products }) => {
     try {
       return { ...state, products: [...products] };
     } catch (error) {

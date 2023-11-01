@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { clearBrandFilter } from './store/brand-filter/brand-filter.action';
-import { loadProducts } from './store/shop/shop.action';
+import { StoreFacade } from './store/store.facade';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +9,11 @@ import { loadProducts } from './store/shop/shop.action';
 export class AppComponent implements OnInit {
 
 
-  constructor(private _store: Store) { }
+  constructor(private _storeService: StoreFacade) { }
 
 
   ngOnInit(): void {
-
-    this._store.dispatch(loadProducts());
-    this._store.dispatch(clearBrandFilter());
+    this._storeService.loadProducts();
+    this._storeService.clearBrandFilter();
   }
 }

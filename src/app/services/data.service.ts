@@ -19,6 +19,4 @@ export class DataService {
   getProducts(): Observable<Product[]> {
     return this._httpClient.get<Product[]>(`${this.BASE_URL}product-data.json`);
   }
-
-
 }

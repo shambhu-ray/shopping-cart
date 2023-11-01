@@ -13,10 +13,10 @@ export class BrandPipe implements PipeTransform {
  * @param {string} brand - The brand to filter by.
  * @return {Product[]} - The filtered array of products.
  */
-  transform(products: Product[], brand: string): Product[] {
-    if (!brand) return products;
+  transform(products: Product[], brandName: string): Product[] {
+    if (!brandName) return products;
 
-    return products.filter(product => brand.includes(product.brand));
+    return products.filter(product => brandName.includes(product.brand));
   }
 
 }

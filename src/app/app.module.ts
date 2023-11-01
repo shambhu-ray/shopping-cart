@@ -12,8 +12,9 @@ import { appRoutes } from './app.route';
 import { HeaderComponent } from './header/header.component';
 import { MaterialModule } from './material.module';
 import { PagesModule } from './pages/pages.module';
-import { reducers } from './store/app.reducer';
 import { ProductEffects } from './store/product/product.effects';
+import { StoreFacade } from './store/store.facade';
+import { reducers } from './store/store.reducer';
 
 
 @NgModule({
@@ -32,7 +33,7 @@ import { ProductEffects } from './store/product/product.effects';
     NgbModule,
     MaterialModule
   ],
-  providers: [],
+  providers: [StoreFacade],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

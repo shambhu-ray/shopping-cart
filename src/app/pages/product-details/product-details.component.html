@@ -1,25 +1,27 @@
-<div class="container">
+<div class="container" *ngIf="product$ | async as product">
     <div class="row">
         <div class="col-sm-5">
-            <ng-container [ngTemplateOutlet]="productImageTempRef"></ng-container>
+            <ng-container [ngTemplateOutlet]="productImageTempRef"
+                [ngTemplateOutletContext]="{$implicit: product}"></ng-container>
         </div>
         <div class="col-sm-7">
-            <ng-container [ngTemplateOutlet]="productDetailsTempRef"></ng-container>
+            <ng-container [ngTemplateOutlet]="productDetailsTempRef"
+                [ngTemplateOutletContext]="{$implicit: product}"></ng-container>
         </div>
     </div>
 </div>
 
 <!-- Product Image Template -->
-<ng-template #productImageTempRef>
+<ng-template #productImageTempRef let-product>
     <aside class="gallery">
         <mat-card class="gallery_card">
             <div class="gallery_wrap">
                 <div class="gallery_img_big">
-                    <img [src]="currentImage" width="100" height="100" />
+                    <img #productImage [src]="product.images[0]" width="100" height="100" />
                 </div>
                 <div class="gallery_img_small">
                     <div *ngFor="let image of product?.images; let i = index" class="gallery_item"
-                        (click)="onChangeImage(i)">
+                        (click)="productImage.src = product.images[i]">
                         <img [src]="image" />
                     </div>
                 </div>
@@ -31,7 +33,7 @@
 </ng-template>
 
 <!-- Product Details Template -->
-<ng-template #productDetailsTempRef>
+<ng-template #productDetailsTempRef let-product>
     <aside class="product_details">
         <article class="">
             <mat-card class="product_details_card">
@@ -74,8 +76,8 @@
                     <dd>{{product.battery}}</dd>
                 </dl>
                 <hr />
-                <app-action-button (addProductToCart)="onAddProductToCart()"
-                    (buyNow)="onBuyNow(product.id)"></app-action-button>
+                <app-action-button (addProductToCart)="storeService.addProductToCart(product)"
+                    (buyNow)="onBuyNow(product)"></app-action-button>
             </mat-card>
         </article>
     </aside>

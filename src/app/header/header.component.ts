@@ -1,21 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { AppState } from '../store/app.state';
+import { Component } from '@angular/core';
+import { StoreFacade } from '../store/store.facade';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   title = 'ShoppingCart';
-  shop$: Observable<any>;
 
-  constructor(private _store: Store<AppState>) { }
+  constructor(public storeService: StoreFacade) { }
 
-  ngOnInit() {
-    this.shop$ = this._store.select('shop');
-  }
 
 }

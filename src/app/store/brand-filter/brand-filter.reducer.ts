@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as BrandFilterActions from './brand-filter.action';
+import { BrandFilterActions } from './brand-filter.action';
 
 export const initialState: string = '';
 
