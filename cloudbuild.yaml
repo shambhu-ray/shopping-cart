@@ -1,0 +1,29 @@
+steps:
+  # 1. Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app",
+        ".",
+      ]
+
+  # 2. Push the image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app"]
+
+  # 3. Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "angular-service"
+      - "--image"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
