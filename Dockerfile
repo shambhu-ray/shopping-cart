@@ -12,5 +12,6 @@ FROM nginx:alpine
 COPY --from=build /app/dist/shopping-cart /usr/share/nginx/html
 
 # Modern GCP Cloud Run Requirement: 
-# We'll use a custom command to make Nginx listen on $PORT
-CMD ["nginx", "-g", "daemon off;"]
+# 1. Create a template for Nginx to listen on the $PORT variable
+# 2. Use 'envsubst' to swap $PORT for the actual number at runtime
+CMD ["/bin/sh", "-c", "sed -i 's/listen  80;/listen '\"$PORT\"';/' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
