@@ -8,10 +8,13 @@ RUN npm run build --configuration=production
 
 # Stage 2: Serve
 FROM nginx:alpine
-# We copy your specific build folder here:
+
+# Copy our custom config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy build output (Verify this path matches your local 'dist' folder!)
 COPY --from=build /app/dist/shopping-cart /usr/share/nginx/html
 
-# Modern GCP Cloud Run Requirement: 
-# 1. Create a template for Nginx to listen on the $PORT variable
-# 2. Use 'envsubst' to swap $PORT for the actual number at runtime
-CMD ["/bin/sh", "-c", "sed -i 's/listen  80;/listen '\"$PORT\"';/' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
