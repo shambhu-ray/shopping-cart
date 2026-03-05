@@ -1,31 +1,41 @@
 steps:
-  # 1. Build the container image
+  # 1. Build the container image with the environment argument
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
+    args: [
         "build",
+        "--build-arg",
+        "BUILD_CONFIG=$_BUILD_CONFIG", # Pass the variable to Docker
         "-t",
-        "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app:$_BUILD_CONFIG", # Tag it uniquely
         ".",
       ]
 
   # 2. Push the image to Artifact Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app"]
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app:$_BUILD_CONFIG",
+      ]
 
-  # 3. Deploy to Cloud Run
+  # 3. Deploy to Cloud Run (Service name is now dynamic too!)
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
       - "run"
       - "deploy"
-      - "angular-service"
+      - "$_SERVICE_NAME"
       - "--image"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app:$_BUILD_CONFIG"
       - "--region"
       - "us-central1"
       - "--platform"
       - "managed"
       - "--allow-unauthenticated"
+
+substitutions:
+  _BUILD_CONFIG: production # Default value if not specified
+  _SERVICE_NAME: angular-service # Default value
+
 options:
   logging: CLOUD_LOGGING_ONLY
