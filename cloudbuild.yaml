@@ -1,12 +1,15 @@
 steps:
-  # 1. Build the container image with the environment argument
+  # 1. Build the container image
+  # We use $_BUILD_CONFIG to tell Angular which environment.ts to use
+  # We tag the image with the config name to keep them separate in the Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: [
+    args:
+      [
         "build",
         "--build-arg",
-        "BUILD_CONFIG=$_BUILD_CONFIG", # Pass the variable to Docker
+        "BUILD_CONFIG=$_BUILD_CONFIG",
         "-t",
-        "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app:$_BUILD_CONFIG", # Tag it uniquely
+        "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app:$_BUILD_CONFIG",
         ".",
       ]
 
@@ -18,7 +21,8 @@ steps:
         "us-central1-docker.pkg.dev/$PROJECT_ID/angular-repo/my-app:$_BUILD_CONFIG",
       ]
 
-  # 3. Deploy to Cloud Run (Service name is now dynamic too!)
+  # 3. Deploy to Cloud Run
+  # $_SERVICE_NAME will be 'angular-service' or 'angular-service-dev'
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
@@ -33,9 +37,10 @@ steps:
       - "managed"
       - "--allow-unauthenticated"
 
+# These are the default values if the trigger doesn't provide them
 substitutions:
-  _BUILD_CONFIG: production # Default value if not specified
-  _SERVICE_NAME: angular-service # Default value
+  _BUILD_CONFIG: production
+  _SERVICE_NAME: angular-service
 
 options:
   logging: CLOUD_LOGGING_ONLY
